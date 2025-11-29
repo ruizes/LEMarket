@@ -84,7 +84,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from goods where goods_name like '%${value}%' and goods_state &gt; 0
 	</select>
 	<select id="findGoodsByVolume" parameterType="java.lang.Integer" resultMap="BaseGoodsJoinObject">
-		select * from goods where goods_state &gt; 0 order by goods_volume desc limit #{0}
-	</select>
-	
+        select * from goods where goods_state &gt; 0 order by goods_volume desc limit #{0}
+    </select>
+
+    <select id="findGoodsSpecByGoodsIdAndSpecValueIds" parameterType="java.lang.Integer" resultMap="BaseGoodsSpecResultMap">
+        select * from goods_spec where goods_id=#{goodsId} and spec_value_ids=#{specValueIds} and goods_spec_state &gt; 0
+    </select>
+
+    <resultMap type="GoodsSpec" id="BaseGoodsSpecResultMap">
+        <id property="goodsSpecId" column="goods_spec_id" javaType="java.lang.Integer" />
+        <result property="goods.goodsId" column="goods_id" javaType="java.lang.Integer" />
+        <result property="specValueIds" column="spec_value_ids" javaType="java.lang.String" />
+        <result property="goodsNum" column="goods_num" javaType="java.lang.Integer" />
+    </resultMap>
+
 </mapper>

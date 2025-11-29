@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.CommentMapper">
+    <resultMap type="Comment" id="BaseResultMap">
+        <id property="commentId" column="comment_id" javaType="java.lang.Integer" />
+        <result property="commentPost.postId" column="comment_post" javaType="java.lang.Integer" />
+        <result property="commentUser.userId" column="comment_user" javaType="java.lang.Integer" />
+        <result property="commentContent" column="comment_content" javaType="java.lang.String" />
+        <result property="commentDate" column="comment_date" javaType="java.util.Date" />
+        <result property="commentState" column="comment_state" javaType="java.lang.Integer" />
+    </resultMap>
+
+    <resultMap type="Comment" id="BaseResultMapJoinObj" extends="BaseResultMap">
+        <association property="commentPost" javaType="Post" column="comment_post" select="com.phonemarket.mapper.PostMapper.findPostById"></association>
+        <association property="commentUser" javaType="Users" column="comment_user" select="com.phonemarket.mapper.UserMapper.findUserById"></association>
+    </resultMap>
+
+    <select id="findCommentById" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+        select * from comment where comment_id=#{id}
+    </select>
+
+    <insert id="addComment" parameterType="Comment">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commentId">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into comment(comment_post, comment_user, comment_content, comment_date, comment_state) values(#{commentPost.postId}, #{commentUser.userId}, #{commentContent}, #{commentDate}, #{commentState})
+    </insert>
+
+    <update id="deleteComment" parameterType="java.lang.Integer">
+        update comment set comment_state=-1 where comment_id=#{id}
+    </update>
+
+    <update id="updateComment" parameterType="Comment">
+        update comment
+        <set>
+            <if test="commentPost!=null and commentPost.postId!=null">
+                comment_post=#{commentPost.postId},
+            </if>
+            <if test="commentUser!=null and commentUser.userId!=null">
+                comment_user=#{commentUser.userId},
+            </if>
+            <if test="commentContent!=null and commentContent!=''">
+                comment_content=#{commentContent},
+            </if>
+            <if test="commentDate!=null">
+                comment_date=#{commentDate},
+            </if>
+            <if test="commentState!=null">
+                comment_state=#{commentState}
+            </if>
+        </set>
+        where comment_id=#{commentId}
+    </update>
+
+    <select id="findCommentByPostId" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+        select * from comment where comment_post=#{postId} and comment_state &gt; 0
+    </select>
+
+    <select id="findCommentByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+        select * from comment where comment_user=#{userId} and comment_state &gt; 0
+    </select>
+</mapper>

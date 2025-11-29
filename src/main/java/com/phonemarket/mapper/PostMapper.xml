@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.PostMapper">
+    <resultMap type="Post" id="BaseResultMap">
+        <id property="postId" column="post_id" javaType="java.lang.Integer" />
+        <result property="postUser.userId" column="post_user" javaType="java.lang.Integer" />
+        <result property="postTitle" column="post_title" javaType="java.lang.String" />
+        <result property="postContent" column="post_content" javaType="java.lang.String" />
+        <result property="postDate" column="post_date" javaType="java.util.Date" />
+        <result property="postType" column="post_type" javaType="java.lang.Integer" />
+        <result property="postState" column="post_state" javaType="java.lang.Integer" />
+        <result property="postLikeCount" column="post_like_count" javaType="java.lang.Integer" />
+    </resultMap>
+
+    <resultMap type="Post" id="BaseResultMapJoinObj" extends="BaseResultMap">
+        <association property="postUser" javaType="Users" column="post_user" select="com.phonemarket.mapper.UserMapper.findUserById"></association>
+    </resultMap>
+
+    <select id="findPostById" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+        select * from post where post_id=#{id}
+    </select>
+
+    <insert id="addPost" parameterType="Post">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="postId">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into post(post_user, post_title, post_content, post_date, post_type, post_state, post_like_count) values(#{postUser.userId}, #{postTitle}, #{postContent}, #{postDate}, #{postType}, #{postState}, #{postLikeCount})
+    </insert>
+
+    <update id="deletePost" parameterType="java.lang.Integer">
+        update post set post_state=-1 where post_id=#{id}
+    </update>
+
+    <update id="updatePost" parameterType="Post">
+        update post
+        <set>
+            <if test="postUser!=null and postUser.userId!=null">
+                post_user=#{postUser.userId},
+            </if>
+            <if test="postTitle!=null and postTitle!=''">
+                post_title=#{postTitle},
+            </if>
+            <if test="postContent!=null and postContent!=''">
+                post_content=#{postContent},
+            </if>
+            <if test="postDate!=null">
+                post_date=#{postDate},
+            </if>
+            <if test="postType!=null">
+                post_type=#{postType},
+            </if>
+            <if test="postState!=null">
+                post_state=#{postState},
+            </if>
+            <if test="postLikeCount!=null">
+                post_like_count=#{postLikeCount}
+            </if>
+        </set>
+        where post_id=#{postId}
+    </update>
+
+    <select id="findAllPost" resultMap="BaseResultMapJoinObj">
+        select * from post where post_state &gt; 0
+    </select>
+
+    <select id="findPostByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+        select * from post where post_user=#{userId} and post_state &gt; 0
+    </select>
+
+    <select id="findPostByType" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+        select * from post where post_type=#{postType} and post_state &gt; 0
+    </select>
+
+    <select id="findPostLikeTitleOrContent" parameterType="java.lang.String" resultMap="BaseResultMapJoinObj">
+        select * from post where (post_title like '%${value}%' or post_content like '%${value}%') and post_state &gt; 0
+    </select>
+
+    <update id="updatePostLikeCount" parameterType="java.lang.Integer">
+        update post set post_like_count=#{1} where post_id=#{0}
+    </update>
+</mapper>
