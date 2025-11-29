@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.SpecValueMapper">
+    <resultMap type="SpecValue" id="BaseResultMap">
+        <id property="specValueId" column="spec_value_id" javaType="java.lang.Integer" />
+        <result property="spec.specId" column="spec_id" javaType="java.lang.Integer" />
+        <result property="specValueName" column="spec_value_name" javaType="java.lang.String" />
+    </resultMap>
+
+    <resultMap type="SpecValue" id="BaseResultMapJoinObj" extends="BaseResultMap">
+        <association property="spec" javaType="Spec" column="spec_id" select="com.phonemarket.mapper.SpecMapper.findSpecById"></association>
+    </resultMap>
+
+    <select id="findSpecValueById" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+        select * from spec_value where spec_value_id=#{id}
+    </select>
+
+    <insert id="addSpecValue" parameterType="SpecValue">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="specValueId">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into spec_value(spec_id, spec_value_name) values(#{spec.specId}, #{specValueName})
+    </insert>
+
+    <update id="deleteSpecValue" parameterType="java.lang.Integer">
+        update spec_value set spec_value_state=-1 where spec_value_id=#{id}
+    </update>
+
+    <update id="updateSpecValue" parameterType="SpecValue">
+        update spec_value
+        <set>
+            <if test="spec!=null and spec.specId!=null">
+                spec_id=#{spec.specId},
+            </if>
+            <if test="specValueName!=null and specValueName!=''">
+                spec_value_name=#{specValueName},
+            </if>
+        </set>
+        where spec_value_id=#{specValueId}
+    </update>
+
+    <select id="findAllSpecValue" resultMap="BaseResultMapJoinObj">
+        select * from spec_value where spec_value_state &gt; 0
+    </select>
+
+    <select id="findSpecValueBySpecId" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+        select * from spec_value where spec_id=#{specId} and spec_value_state &gt; 0
+    </select>
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.LikeMapper">
+    <resultMap type="Like" id="BaseResultMap">
+        <id property="likeId" column="like_id" javaType="java.lang.Integer" />
+        <result property="likePost.postId" column="like_post" javaType="java.lang.Integer" />
+        <result property="likeUser.userId" column="like_user" javaType="java.lang.Integer" />
+        <result property="likeState" column="like_state" javaType="java.lang.Integer" />
+    </resultMap>
+
+    <resultMap type="Like" id="BaseResultMapJoinObj" extends="BaseResultMap">
+        <association property="likePost" javaType="Post" column="like_post" select="com.phonemarket.mapper.PostMapper.findPostById"></association>
+        <association property="likeUser" javaType="Users" column="like_user" select="com.phonemarket.mapper.UserMapper.findUserById"></association>
+    </resultMap>
+
+    <select id="findLikeById" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+        select * from like where like_id=#{id}
+    </select>
+
+    <insert id="addLike" parameterType="Like">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="likeId">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into like(like_post, like_user, like_state) values(#{likePost.postId}, #{likeUser.userId}, #{likeState})
+    </insert>
+
+    <update id="deleteLike" parameterType="java.lang.Integer">
+        update like set like_state=-1 where like_id=#{id}
+    </update>
+
+    <update id="updateLike" parameterType="Like">
+        update like
+        <set>
+            <if test="likePost!=null and likePost.postId!=null">
+                like_post=#{likePost.postId},
+            </if>
+            <if test="likeUser!=null and likeUser.userId!=null">
+                like_user=#{likeUser.userId},
+            </if>
+            <if test="likeState!=null">
+                like_state=#{likeState}
+            </if>
+        </set>
+        where like_id=#{likeId}
+    </update>
+
+    <select id="findLikeByPostIdAndUserId" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+        select * from like where like_post=#{postId} and like_user=#{userId} and like_state &gt; 0
+    </select>
+
+    <select id="countLikeByPostId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from like where like_post=#{postId} and like_state &gt; 0
+    </select>
+</mapper>

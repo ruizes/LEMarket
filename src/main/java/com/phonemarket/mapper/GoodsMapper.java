@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.phonemarket.entity.Goods;
+import com.phonemarket.entity.GoodsSpec;
 
 @Repository
 public interface GoodsMapper {
@@ -18,4 +19,5 @@ public interface GoodsMapper {
 	List<Goods> findHotGoods(Integer num);
 	List<Goods> findGoodsLikeName(String name);
 	List<Goods> findGoodsByVolume(Integer limit);
+    GoodsSpec findGoodsSpecByGoodsIdAndSpecValueIds(Integer goodsId, String specValueIds);
 }
