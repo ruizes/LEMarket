@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.MerchantMapper">
+    <resultMap id="BaseResultMap" type="com.phonemarket.entity.Merchant">
+        <id column="merchant_id" jdbcType="INTEGER" property="merchantId" />
+        <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+        <result column="merchant_phone" jdbcType="VARCHAR" property="merchantPhone" />
+        <result column="merchant_email" jdbcType="VARCHAR" property="merchantEmail" />
+        <result column="merchant_pass" jdbcType="VARCHAR" property="merchantPass" />
+        <result column="merchant_address" jdbcType="VARCHAR" property="merchantAddress" />
+        <result column="merchant_img" jdbcType="VARCHAR" property="merchantImg" />
+        <result column="merchant_state" jdbcType="INTEGER" property="merchantState" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+
+    <insert id="saveMerchant" parameterType="com.phonemarket.entity.Merchant">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="merchantId">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into merchant(merchant_name, merchant_phone, merchant_email, merchant_pass, merchant_address, merchant_img, merchant_state, create_time, update_time)
+        values(#{merchantName}, #{merchantPhone}, #{merchantEmail}, #{merchantPass}, #{merchantAddress}, #{merchantImg}, #{merchantState}, #{createTime}, #{updateTime})
+    </insert>
+
+    <select id="findByMerchantName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from merchant where merchant_name = #{merchantName}
+    </select>
+
+    <update id="updateMerchant" parameterType="com.phonemarket.entity.Merchant">
+        update merchant
+        <set>
+            <if test="merchantName != null">merchant_name = #{merchantName},</if>
+            <if test="merchantPhone != null">merchant_phone = #{merchantPhone},</if>
+            <if test="merchantEmail != null">merchant_email = #{merchantEmail},</if>
+            <if test="merchantPass != null">merchant_pass = #{merchantPass},</if>
+            <if test="merchantAddress != null">merchant_address = #{merchantAddress},</if>
+            <if test="merchantImg != null">merchant_img = #{merchantImg},</if>
+            <if test="merchantState != null">merchant_state = #{merchantState},</if>
+            <if test="updateTime != null">update_time = #{updateTime}</if>
+        </set>
+        where merchant_id = #{merchantId}
+    </update>
+
+    <delete id="deleteMerchant" parameterType="java.lang.Integer">
+        delete from merchant where merchant_id = #{merchantId}
+    </delete>
+
+    <select id="findById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from merchant where merchant_id = #{merchantId}
+    </select>
+</mapper>

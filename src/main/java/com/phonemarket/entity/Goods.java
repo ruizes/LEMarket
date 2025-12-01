@@ -1,25 +1,64 @@
 package com.phonemarket.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class Goods  implements Serializable{
 	private Integer goodsId;
-	private String goodsName;
-	private Double goodsPrice;
-	private Integer goodsNum;
-	private GoodsType goodsType;
-	private Memory goodsMemory;
-	private String goodsColor;
-	private String goodsImg;
-	private Integer goodsState;
-	private String goodsDesc;
-	private Integer goodsVolume;
+private String goodsName;
+private Double goodsPrice;
+private Integer goodsNum;
+private GoodsType goodsType;
+private Memory goodsMemory;
+private String goodsColor;
+private String goodsImg;
+private Integer goodsState;
+private String goodsDesc;
+private Integer goodsVolume;
+private Integer merchantId;
+// Flash sale fields
+private Double flashSalePrice;
+private Date flashSaleStartTime;
+private Date flashSaleEndTime;
+private Integer flashSaleStock;
 	
 	private List<Evaluate> evaList;
 	
 	public List<Evaluate> getEvaList() {
 		return evaList;
+	}
+
+	public Double getFlashSalePrice() {
+		return flashSalePrice;
+	}
+
+	public void setFlashSalePrice(Double flashSalePrice) {
+		this.flashSalePrice = flashSalePrice;
+	}
+
+	public Date getFlashSaleStartTime() {
+		return flashSaleStartTime;
+	}
+
+	public void setFlashSaleStartTime(Date flashSaleStartTime) {
+		this.flashSaleStartTime = flashSaleStartTime;
+	}
+
+	public Date getFlashSaleEndTime() {
+		return flashSaleEndTime;
+	}
+
+	public void setFlashSaleEndTime(Date flashSaleEndTime) {
+		this.flashSaleEndTime = flashSaleEndTime;
+	}
+
+	public Integer getFlashSaleStock() {
+		return flashSaleStock;
+	}
+
+	public void setFlashSaleStock(Integer flashSaleStock) {
+		this.flashSaleStock = flashSaleStock;
 	}
 	public void setEvaList(List<Evaluate> evaList) {
 		this.evaList = evaList;
@@ -85,40 +124,60 @@ public class Goods  implements Serializable{
 		this.goodsDesc = goodsDesc;
 	}
 	public Integer getGoodsVolume() {
-		return goodsVolume;
-	}
-	public void setGoodsVolume(Integer goodsVolume) {
-		this.goodsVolume = goodsVolume;
-	}
+	return goodsVolume;
+}
+public void setGoodsVolume(Integer goodsVolume) {
+	this.goodsVolume = goodsVolume;
+}
+public Integer getMerchantId() {
+	return merchantId;
+}
+public void setMerchantId(Integer merchantId) {
+	this.merchantId = merchantId;
+}
 	public Goods() {
 		super();
 	}
 	public Goods(Integer goodsId, String goodsName, Double goodsPrice, Integer goodsNum, GoodsType goodsType,
-			Memory goodsMemory, String goodsColor, String goodsImg, Integer goodsState, String goodsDesc,
-			Integer goodsVolume) {
-		super();
-		this.goodsId = goodsId;
-		this.goodsName = goodsName;
-		this.goodsPrice = goodsPrice;
-		this.goodsNum = goodsNum;
-		this.goodsType = goodsType;
-		this.goodsMemory = goodsMemory;
-		this.goodsColor = goodsColor;
-		this.goodsImg = goodsImg;
-		this.goodsState = goodsState;
-		this.goodsDesc = goodsDesc;
-		this.goodsVolume = goodsVolume;
+		Memory goodsMemory, String goodsColor, String goodsImg, Integer goodsState, String goodsDesc,
+		Integer goodsVolume, Integer merchantId, Double flashSalePrice, Date flashSaleStartTime, Date flashSaleEndTime,
+		Integer flashSaleStock) {
+	super();
+	this.goodsId = goodsId;
+	this.goodsName = goodsName;
+	this.goodsPrice = goodsPrice;
+	this.goodsNum = goodsNum;
+	this.goodsType = goodsType;
+	this.goodsMemory = goodsMemory;
+	this.goodsColor = goodsColor;
+	this.goodsImg = goodsImg;
+	this.goodsState = goodsState;
+	this.goodsDesc = goodsDesc;
+	this.goodsVolume = goodsVolume;
+	this.merchantId = merchantId;
+	this.flashSalePrice = flashSalePrice;
+this.flashSaleStartTime = flashSaleStartTime;
+this.flashSaleEndTime = flashSaleEndTime;
+this.flashSaleStock = flashSaleStock;
 	}
 	public Goods(String goodsName, Double goodsPrice, Integer goodsNum, GoodsType goodsType,
-			Memory goodsMemory, String goodsColor, String goodsImg, String goodsDesc) {
-		super();
-		this.goodsName = goodsName;
-		this.goodsPrice = goodsPrice;
-		this.goodsNum = goodsNum;
-		this.goodsType = goodsType;
-		this.goodsMemory = goodsMemory;
-		this.goodsColor = goodsColor;
-		this.goodsImg = goodsImg;
-		this.goodsDesc = goodsDesc;
-	}
+		Memory goodsMemory, String goodsColor, String goodsImg, String goodsDesc,
+		Integer goodsVolume, Integer merchantId, Double flashSalePrice, Date flashSaleStartTime, Date flashSaleEndTime,
+		Integer flashSaleStock) {
+	super();
+	this.goodsName = goodsName;
+	this.goodsPrice = goodsPrice;
+	this.goodsNum = goodsNum;
+	this.goodsType = goodsType;
+	this.goodsMemory = goodsMemory;
+	this.goodsColor = goodsColor;
+	this.goodsImg = goodsImg;
+	this.goodsDesc = goodsDesc;
+	this.goodsVolume = goodsVolume;
+	this.merchantId = merchantId;
+	this.flashSalePrice = flashSalePrice;
+	this.flashSaleStartTime = flashSaleStartTime;
+	this.flashSaleEndTime = flashSaleEndTime;
+	this.flashSaleStock = flashSaleStock;
+}
 }
